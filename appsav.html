@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobHive - Manage Your Part-Time Jobs</title>
+  <style>
+    :root {
+      --primary: #8B4513;
+      --primary-dark: #5D2906;
+      --secondary: #D2691E;
+      --light-brown: #F5F0E1;
+      --mid-brown: #E6D7B9;
+      --dark-brown: #A67C52;
+      --white: #ffffff;
+      --black: #3A2618;
+      --text-brown: #5E4B3E;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--light-brown);
+      color: var(--text-brown);
+    }
+    
+    header {
+      background-color: var(--white);
+      padding: 1rem 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .logo span {
+      color: var(--secondary);
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    
+    nav a {
+      text-decoration: none;
+      color: var(--text-brown);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    nav a:hover, nav a.active {
+      color: var(--primary);
+    }
+    
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .user-profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .main-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .jobs-nav {
+      display: flex;
+      margin-bottom: 2rem;
+      background-color: var(--white);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    
+    .jobs-nav button {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background-color: transparent;
+      color: var(--text-brown);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .jobs-nav button.active {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+    
+    .jobs-nav button:hover:not(.active) {
+      background-color: var(--mid-brown);
+    }
+    
+    .jobs-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .job-card {
+      background-color: var(--white);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .job-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .job-header {
+      display: flex;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--mid-brown);
+    }
+    
+    .company-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      background-color: var(--primary);
+    }
+    
+    .job-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--black);
+    }
+    
+    .company-name {
+      font-size: 0.9rem;
+      color: var(--dark-brown);
+      margin-bottom: 0.5rem;
+    }
+    
+    .job-details {
+      padding: 1.5rem;
+    }
+    
+    .job-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .job-tag {
+      padding: 0.25rem 0.75rem;
+      background-color: var(--light-brown);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .job-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .job-info-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--dark-brown);
+    }
+    
+    .job-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+    
+    .applied {
+      background-color: #E9DAC1;
+      color: #9C6644;
+    }
+    
+    .saved {
+      background-color: #F0E6D2;
+      color: #966F33;
+    }
+    
+    .job-actions {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--mid-brown);
+      padding: 1rem 1.5rem;
+    }
+    
+    .job-actions button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .primary-btn {
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+    }
+    
+    .primary-btn:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .secondary-btn {
+      background-color: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    
+    .secondary-btn:hover {
+      background-color: rgba(139, 69, 19, 0.1);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background-color: var(--white);
+      border-radius: 0.5rem;
+      grid-column: 1 / -1;
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      color: var(--black);
+    }
+    
+    .empty-state p {
+      color: var(--dark-brown);
+      margin-bottom: 1.5rem;
+    }
+    
+    .empty-state button {
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 0.25rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .empty-state button:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    @media (max-width: 768px) {
+      .jobs-container {
+        grid-template-columns: 1fr;
+      }
+      
+      nav ul {
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo">Job<span>Hive</span></div>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="findjobs..html">Find Jobs</a></li>
+          
+        </ul>
+      </nav>
+      
+    </div>
+  </header>
+  
+  <main class="main-container">
+    <div class="jobs-nav">
+      <button class="active">Applied Jobs (3)</button>
+      <button>Saved Jobs (2)</button>
+    </div>
+    
+    <div class="jobs-container" id="applied-jobs">
+      <!-- Job Card 1 -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="company-logo">SC</div>
+          <div>
+            <div class="job-title">Bakery staff</div>
+            <div class="company-name">New Tops Bakery</div>
+            <div class="job-status applied">Applied on Mar 3, 2025</div>
+          </div>
+        </div>
+        <div class="job-details">
+          <div class="job-tags">
+            <span class="job-tag">Remote</span>
+            
+            <span class="job-tag">Part-time</span>
+          </div>
+          <div class="job-info">
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+              15-20 hrs/week
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+              </svg>
+              Flexible hours
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Kochi
+            </div>
+          </div>
+        </div>
+        <div class="job-actions">
+          <button class="primary-btn">View Application</button>
+          <button class="secondary-btn">Withdraw</button>
+        </div>
+      </div>
+      
+      <!-- Job Card 2 -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="company-logo" style="background-color: #A0522D;">DM</div>
+          <div>
+            <div class="job-title">Waiter</div>
+            <div class="company-name">Mayflower restaurant</div>
+            <div class="job-status applied">Applied on Feb 28, 2025</div>
+          </div>
+        </div>
+        <div class="job-details">
+          <div class="job-tags">
+            <span class="job-tag">Remote</span>
+           
+            <span class="job-tag">Part-time</span>
+          </div>
+          <div class="job-info">
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+              10-15 hrs/week
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Kozhikode
+            </div>
+          </div>
+        </div>
+        <div class="job-actions">
+          <button class="primary-btn">View Application</button>
+          <button class="secondary-btn">Withdraw</button>
+        </div>
+      </div>
+      
+      <!-- Job Card 3 -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="company-logo" style="background-color: #8B5A2B;">EC</div>
+          <div>
+            <div class="job-title">Mechanic</div>
+            <div class="company-name">Aline motors</div>
+            <div class="job-status applied">Applied on Mar 5, 2025</div>
+          </div>
+        </div>
+        <div class="job-details">
+          <div class="job-tags">
+            <span class="job-tag">On-site</span>
+            <span class="job-tag">Retail</span>
+            <span class="job-tag">Weekend</span>
+          </div>
+          <div class="job-info">
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+              16 hrs/week
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Thiruvanthapuram
+            </div>
+          </div>
+        </div>
+        <div class="job-actions">
+          <button class="primary-btn">View Application</button>
+          <button class="secondary-btn">Withdraw</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="jobs-container" id="saved-jobs" style="display: none;">
+      <!-- Job Card 1 -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="company-logo" style="background-color: #CD853F;">TB</div>
+          <div>
+            <div class="job-title">Virtual Teaching Assistant</div>
+            <div class="company-name">TechBootcamp</div>
+            <div class="job-status saved">Saved on Mar 7, 2025</div>
+          </div>
+        </div>
+        <div class="job-details">
+          <div class="job-tags">
+            <span class="job-tag">Remote</span>
+            <span class="job-tag">Education</span>
+            <span class="job-tag">Evening</span>
+          </div>
+          <div class="job-info">
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+              12-15 hrs/week
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+              </svg>
+              6pm-9pm weekdays
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Virtual
+            </div>
+          </div>
+        </div>
+        <div class="job-actions">
+          <button class="primary-btn">Apply Now</button>
+          <button class="secondary-btn">Remove</button>
+        </div>
+      </div>
+      
+      <!-- Job Card 2 -->
+      <div class="job-card">
+        <div class="job-header">
+          <div class="company-logo" style="background-color: #D2691E;">FC</div>
+          <div>
+            <div class="job-title">Food Delivery Driver</div>
+            <div class="company-name">FastCourier</div>
+            <div class="job-status saved">Saved on Mar 1, 2025</div>
+          </div>
+        </div>
+        <div class="job-details">
+          <div class="job-tags">
+            <span class="job-tag">On-site</span>
+            <span class="job-tag">Delivery</span>
+            <span class="job-tag">Flexible</span>
+          </div>
+          <div class="job-info">
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+              Up to 20 hrs/week
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+              </svg>
+              Pick your hours
+            </div>
+            <div class="job-info-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Portland, OR
+            </div>
+          </div>
+        </div>
+        <div class="job-actions">
+          <button class="primary-btn">Apply Now</button>
+          <button class="secondary-btn">Remove</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const appliedJobsButton = document.querySelector('.jobs-nav button:nth-child(1)');
+      const savedJobsButton = document.querySelector('.jobs-nav button:nth-child(2)');
+      const appliedJobsContainer = document.getElementById('applied-jobs');
+      const savedJobsContainer = document.getElementById('saved-jobs');
+      
+      appliedJobsButton.addEventListener('click', function() {
+        appliedJobsButton.classList.add('active');
+        savedJobsButton.classList.remove('active');
+        appliedJobsContainer.style.display = 'grid';
+        savedJobsContainer.style.display = 'none';
+      });
+      
+      savedJobsButton.addEventListener('click', function() {
+        savedJobsButton.classList.add('active');
+        appliedJobsButton.classList.remove('active');
+        savedJobsContainer.style.display = 'grid';
+        appliedJobsContainer.style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>

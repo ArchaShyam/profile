@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHive - Find Jobs</title>
+    <style>
+        :root {
+            --primary: #8B5A2B;
+            --primary-light: #A67C52;
+            --primary-dark: #704214;
+            --accent: #D2B48C;
+            --accent-light: #E6D2B8;
+            --text-dark: #3A3A3A;
+            --text-light: #6B6B6B;
+            --bg-light: #F5F1EC;
+            --bg-white: #FFFFFF;
+            --border: #E0D5C5;
+            --success: #9DC88D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--bg-white);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Main Content */
+        .page-title {
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            font-size: 28px;
+            color: var(--primary-dark);
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: var(--bg-white);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .checkbox-group {
+            margin-top: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            margin-right: 10px;
+        }
+
+        /* Jobs Grid */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .sort-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sort-select {
+            padding: 8px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .job-card {
+            background-color: var(--bg-white);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .job-description {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .job-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .job-info i {
+            margin-right: 8px;
+            color: var(--primary-light);
+        }
+
+        .details-btn {
+            display: block;
+            background-color: var(--accent);
+            color: var(--primary-dark);
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .details-btn:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">JobHive</a>
+                <ul class="nav-links">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="findjobs..html">Find Jobs</a></li>
+                    <li><a href="appsav.html">My Jobs</a></li>
+                   
+                </ul>
+                <div class="buttons">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <a href="post.html" class="btn btn-primary">Post a Job</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Find Jobs</h1>
+
+        <div class="content-wrapper">
+            <!-- Filter Section -->
+            <aside class="filter-section">
+                <div class="filter-group">
+                    <h3 class="filter-title">Keywords</h3>
+                    <input type="text" class="filter-input" placeholder="Keywords">
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Location</h3>
+                    <input type="text" class="filter-input" placeholder="Location">
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Category</h3>
+                    <select class="filter-input">
+                        <option value="">Select a Category</option>
+                        <option value="it">Delivery</option>
+                        <option value="retail">Staff</option>
+                        <option value="hospitality">Chef</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="construction">Construction</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Job Type</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Full Time
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Part Time
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Freelance
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox"> Remote
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Experience</h3>
+                    <select class="filter-input">
+                        <option value="">Select Experience</option>
+                        <option value="entry">Entry Level</option>
+                        <option value="mid">Mid Level</option>
+                        <option value="senior">Senior Level</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">Salary Range</h3>
+                    <select class="filter-input">
+                        <option value="">Select Salary Range</option>
+                        <option value="0-10000">₹0 - ₹10,000</option>
+                        <option value="10000-20000">₹10,000 - ₹20,000</option>
+                        <option value="20000-30000">₹20,000 - ₹30,000</option>
+                        <option value="30000+">₹30,000+</option>
+                    </select>
+                </div>
+            </aside>
+
+            <!-- Jobs Section -->
+            <div class="jobs-section">
+                <div class="sort-bar">
+                    <select class="sort-select">
+                        <option value="latest">Latest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="highSalary">Highest Salary</option>
+                        <option value="lowSalary">Lowest Salary</option>
+                    </select>
+                </div>
+
+                <div class="jobs-grid">
+                    <!-- Job Card 1 -->
+                    <div class="job-card">
+                        <h3 class="job-title">Bakery Staff</h3>
+                        <p class="job-description">We are in need of a bakery staff for our bakery.</p>
+                        <div class="job-info">
+                            <i>📍</i> Kochi
+                        </div>
+                        <div class="job-info">
+                            <i>🏠</i> Remote
+                        </div>
+                        <div class="job-info">
+                            <i>💰</i> ₹15,000
+                        </div>
+                        <a href="job details.html" class="details-btn">Details</a>
+                    </div>
+
+                    <!-- Job Card 2 -->
+                    <div class="job-card">
+                        <h3 class="job-title">Waiter</h3>
+                        <p class="job-description">We are in need of a Waiter for our restaurant.</p>
+                        <div class="job-info">
+                            <i>📍</i> Kozhikode
+                        </div>
+                        <div class="job-info">
+                            <i>🏠</i> Remote
+                        </div>
+                        <div class="job-info">
+                            <i>💰</i> ₹18,000 per month
+                        </div>
+                        <a href="waiter.html" class="details-btn">Details</a>
+                    </div>
+
+                    <!-- Job Card 3 -->
+                    <div class="job-card">
+                        <h3 class="job-title">Delivery</h3>
+                        <p class="job-description">We are in need of a Delivery partner for our company.</p>
+                        <div class="job-info">
+                            <i>📍</i> Thrissur
+                        </div>
+                        <div class="job-info">
+                            <i>🏠</i> Remote
+                        </div>
+                        <div class="job-info">
+                            <i>💰</i> ₹12,000 per month
+                        </div>
+                        <a href="delivery.html" class="details-btn">Details</a>
+                    </div>
+
+                    <!-- Job Card 4 -->
+                    <div class="job-card">
+                        <h3 class="job-title">Graphic Designer</h3>
+                        <p class="job-description">We are in need of a Graphic designer for our company.</p>
+                        <div class="job-info">
+                            <i>📍</i> Kannur
+                        </div>
+                        <div class="job-info">
+                            <i>🏠</i> Remote
+                        </div>
+                        <div class="job-info">
+                            <i>💰</i> ₹18,000 per month
+                        </div>
+                        <a href="design.html" class="details-btn">Details</a>
+                    </div>
+
+                    <!-- Job Card 5 -->
+                    <div class="job-card">
+                        <h3 class="job-title">Plumber</h3>
+                        <p class="job-description">We are in need of a plumber for contract works to join our team.</p>
+                        <div class="job-info">
+                            <i>📍</i> Kottayam
+                        </div>
+                        <div class="job-info">
+                            <i>🏠</i> Remote
+                        </div>
+                        <div class="job-info">
+                            <i>💰</i> ₹14,000 per month
+                        </div>
+                        <a href="plumber.html" class="details-btn">Details</a>
+                    </div>
+
+                    <!-- Job Card 6 -->
+                    <div class="job-card">
+                        <h3 class="job-title">Mechanic</h3>
+                        <p class="job-description">We are in need of a mechanic for our workshop.</p>
+                        <div class="job-info">
+                            <i>📍</i> Thiruvananthapuram
+                        </div>
+                        <div class="job-info">
+                            <i>🏠</i> Remote
+                        </div>
+                        <div class="job-info">
+                            <i>💰</i> ₹20,000 per month
+                        </div>
+                        <a href="mechanic.html" class="details-btn">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

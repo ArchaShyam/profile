@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job - Employer Dashboard</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2ecc71;
+            --secondary-dark: #27ae60;
+            --text: #333;
+            --text-light: #777;
+            --bg-light: #f9f9f9;
+            --border: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .page-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .preview-section {
+            margin-top: 20px;
+        }
+        
+        .job-preview {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .job-preview-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .job-meta {
+            display: flex;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .job-meta div {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .job-meta i {
+            margin-right: 5px;
+        }
+        
+        .job-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .requirements-list {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .requirements-list li {
+            margin-bottom: 8px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #e0f7fa;
+            color: #00838f;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: #e0f2f1;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav ul li {
+                margin-left: 0;
+                margin-right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">JobBoard</div>
+            <nav>
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                   
+                    <li><a href="#">Applicants</a></li>
+                    <li><a href="#">Account</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <h1 class="page-title">Post a New Job</h1>
+        
+        <div id="successMessage" class="success-message">
+            Your job has been successfully posted and is now live!
+        </div>
+        
+        <div class="grid">
+            <div>
+                <div class="card">
+                    <h2 class="card-title">Job Details</h2>
+                    <form id="jobPostForm">
+                        <div class="form-group">
+                            <label for="jobTitle">Job Title*</label>
+                            <input type="text" id="jobTitle" name="jobTitle" required placeholder="e.g. Senior Web Developer">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="location">Location*</label>
+                            <input type="text" id="location" name="location" required placeholder="e.g. New York, NY or Remote">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="employmentType">Employment Type*</label>
+                            <select id="employmentType" name="employmentType" required>
+                                <option value="">Select an option</option>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Temporary">Temporary</option>
+                                <option value="Internship">Internship</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="salaryRange">Salary Range</label>
+                            <input type="text" id="salaryRange" name="salaryRange" placeholder="e.g. $80,000 - $100,000 per year">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="jobDescription">Job Description*</label>
+                            <textarea id="jobDescription" name="jobDescription" required placeholder="Describe the role, responsibilities, and ideal candidate..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="requirements">Requirements</label>
+                            <textarea id="requirements" name="requirements" placeholder="List key qualifications, skills, and experience needed..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="benefits">Benefits</label>
+                            <textarea id="benefits" name="benefits" placeholder="Healthcare, retirement plans, vacation policy, etc..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="applicationDeadline">Application Deadline</label>
+                            <input type="date" id="applicationDeadline" name="applicationDeadline">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tags">Tags (comma separated)</label>
+                            <input type="text" id="tags" name="tags" placeholder="e.g. JavaScript, React, Remote">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="previewBtn" class="btn btn-outline">Preview</button>
+                            <div>
+                                <button type="button" id="saveAsDraftBtn" class="btn btn-outline">Save as Draft</button>
+                                <button type="submit" id="submitJobBtn" class="btn btn-secondary">Post Job</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <div class="card">
+                    <h2 class="card-title">Preview Your Job Post</h2>
+                    <div id="jobPreview" class="job-preview">
+                        <div class="job-preview-title">Job Title Preview</div>
+                        <div class="job-meta">
+                            <div><i>📍</i> Location</div>
+                            <div><i>🕒</i> Employment Type</div>
+                            <div><i>💰</i> Salary Range</div>
+                        </div>
+                        <div class="job-description">
+                            <p>Job description will appear here as you type...</p>
+                        </div>
+                        <div>
+                            <h3>Requirements:</h3>
+                            <ul class="requirements-list">
+                                <li>Requirements will appear here...</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>Benefits:</h3>
+                            <p>Benefits will appear here...</p>
+                        </div>
+                        <div>
+                            <h3>Tags:</h3>
+                            <div id="tagsPreview">
+                                <span class="tag">Sample Tag</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px; color: var(--text-light);">
+                            <p>Application Deadline: <span id="deadlinePreview">Not specified</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get form elements
+            const jobForm = document.getElementById('jobPostForm');
+            const previewBtn = document.getElementById('previewBtn');
+            const saveAsDraftBtn = document.getElementById('saveAsDraftBtn');
+            const submitJobBtn = document.getElementById('submitJobBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Form fields
+            const jobTitle = document.getElementById('jobTitle');
+            const location = document.getElementById('location');
+            const employmentType = document.getElementById('employmentType');
+            const salaryRange = document.getElementById('salaryRange');
+            const jobDescription = document.getElementById('jobDescription');
+            const requirements = document.getElementById('requirements');
+            const benefits = document.getElementById('benefits');
+            const applicationDeadline = document.getElementById('applicationDeadline');
+            const tags = document.getElementById('tags');
+            
+            // Preview elements
+            const jobPreviewTitle = document.querySelector('.job-preview-title');
+            const jobMeta = document.querySelector('.job-meta');
+            const jobDescriptionPreview = document.querySelector('.job-description');
+            const requirementsPreview = document.querySelector('.requirements-list');
+            const benefitsPreview = document.querySelector('h3 + p');
+            const tagsPreview = document.getElementById('tagsPreview');
+            const deadlinePreview = document.getElementById('deadlinePreview');
+            
+            // Update preview as user types
+            function updatePreview() {
+                // Update job title
+                jobPreviewTitle.textContent = jobTitle.value || 'Job Title Preview';
+                
+                // Update job meta
+                jobMeta.innerHTML = `
+                    <div><i>📍</i> ${location.value || 'Location'}</div>
+                    <div><i>🕒</i> ${employmentType.value || 'Employment Type'}</div>
+                    <div><i>💰</i> ${salaryRange.value || 'Salary Range'}</div>
+                `;
+                
+                // Update job description
+                jobDescriptionPreview.innerHTML = `<p>${jobDescription.value || 'Job description will appear here as you type...'}</p>`;
+                
+                // Update requirements
+                if (requirements.value) {
+                    const reqItems = requirements.value.split('\n').filter(req => req.trim() !== '');
+                    requirementsPreview.innerHTML = reqItems.map(req => `<li>${req}</li>`).join('');
+                } else {
+                    requirementsPreview.innerHTML = '<li>Requirements will appear here...</li>';
+                }
+                
+                // Update benefits
+                benefitsPreview.textContent = benefits.value || 'Benefits will appear here...';
+                
+                // Update tags
+                if (tags.value) {
+                    const tagArray = tags.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+                    tagsPreview.innerHTML = tagArray.map(tag => `<span class="tag">${tag}</span>`).join('');
+                } else {
+                    tagsPreview.innerHTML = '<span class="tag">Sample Tag</span>';
+                }
+                
+                // Update deadline
+                if (applicationDeadline.value) {
+                    const deadlineDate = new Date(applicationDeadline.value);
+                    const formattedDate = deadlineDate.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    deadlinePreview.textContent = formattedDate;
+                } else {
+                    deadlinePreview.textContent = 'Not specified';
+                }
+            }
+            
+            // Add input event listeners to all form fields
+            const formFields = [jobTitle, location, employmentType, salaryRange, jobDescription, requirements, benefits, applicationDeadline, tags];
+            formFields.forEach(field => {
+                field.addEventListener('input', updatePreview);
+            });
+            
+            // Preview button click handler
+            previewBtn.addEventListener('click', function() {
+                updatePreview();
+                // Scroll to preview on mobile
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.preview-section').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+            
+            // Save as draft button click handler
+            saveAsDraftBtn.addEventListener('click', function() {
+                // In a real application, this would save to localStorage or send to a server
+                alert('Job saved as draft!');
+                
+                // For demonstration, we'll save to localStorage
+                const jobData = {
+                    jobTitle: jobTitle.value,
+                    location: location.value,
+                    employmentType: employmentType.value,
+                    salaryRange: salaryRange.value,
+                    jobDescription: jobDescription.value,
+                    requirements: requirements.value,
+                    benefits: benefits.value,
+                    applicationDeadline: applicationDeadline.value,
+                    tags: tags.value,
+                    status: 'draft',
+                    savedAt: new Date().toISOString()
+                };
+                
+                // Get existing drafts or initialize empty array
+                const existingDrafts = JSON.parse(localStorage.getItem('jobDrafts') || '[]');
+                existingDrafts.push(jobData);
+                
+                // Save back to localStorage
+                localStorage.setItem('jobDrafts', JSON.stringify(existingDrafts));
+            });
+            
+            // Form submit handler
+            jobForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                if (!jobTitle.value || !location.value || !employmentType.value || !jobDescription.value) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+                
+                // In a real application, this would send the form data to a server
+                // For demonstration purposes, we'll show a success message
+                
+                // Simulate server submission with a timeout
+                submitJobBtn.disabled = true;
+                submitJobBtn.textContent = 'Posting...';
+                
+                setTimeout(() => {
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Scroll to top to see the message
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Reset form
+                    jobForm.reset();
+                    updatePreview();
+                    
+                    // Reset button
+                    submitJobBtn.disabled = false;
+                    submitJobBtn.textContent = 'Post Job';
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                }, 1500);
+            });
+            
+            // Initial preview update
+            updatePreview();
+        });
+    </script>
+</body>
+</html>

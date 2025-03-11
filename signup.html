@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Part Time Jobs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1200/800');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .signup-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            width: 450px;
+            padding: 40px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .signup-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .signup-header p {
+            color: #777;
+            font-size: 14px;
+        }
+        
+        .app-name {
+            font-size: 22px;
+            color: #4a6fa5;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .input-row .input-group {
+            flex: 1;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            border-color: #4a6fa5;
+            outline: none;
+        }
+        
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .terms input {
+            margin-right: 8px;
+            margin-top: 3px;
+        }
+        
+        .terms label {
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .terms a {
+            color: #4a6fa5;
+            text-decoration: none;
+        }
+        
+        .terms a:hover {
+            text-decoration: underline;
+        }
+        
+        .signup-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .signup-button:hover {
+            background-color: #3c5d8d;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .login-link a {
+            color: #4a6fa5;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .job-icons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .job-icon {
+            background-color: #eef2f7;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            font-size: 18px;
+            color: #4a6fa5;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="app-name">JobHive</div>
+        
+        <div class="job-icons">
+            <div class="job-icon">💼</div>
+            <div class="job-icon">🛒</div>
+            <div class="job-icon">🖥️</div>
+            <div class="job-icon">🚚</div>
+        </div>
+        
+        <div class="signup-header">
+            <h1>Create Account</h1>
+            <p>Join us to discover part-time opportunities</p>
+        </div>
+        
+        <form>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" placeholder="Enter your first name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" placeholder="Enter your last name" required>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter your phone number" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="job-type">I'm looking for</label>
+                <select id="job-type" required>
+                    <option value="" disabled selected>Select job type</option>
+                    <option value="retail">Retail & Customer Service</option>
+                    <option value="food">Food & Hospitality</option>
+                    <option value="office">Office & Administrative</option>
+                    <option value="driving">Driving & Delivery</option>
+                    <option value="remote">Remote & Virtual</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Create a password" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+            </div>
+            
+            <div class="terms">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I understand that my data will be processed according to JobHIve <a href="#">Data Policy</a>.</label>
+            </div>
+            <button type="submit" class="signup-button">Create Account</button>
+                
+             
+            
+           
+            
+            <div class="login-link">
+                Already have an account? <a href="login.html">Log in</a>
+            </div>
+        </form>
+    </div>
+
+
+
+    <!-- Include Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js';
+    import { getDatabase, ref, push } from 'https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js';
+    import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js';
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBtxAxJnbSI6UfqmzUW40ERPH8_GIwoU4I",
+    authDomain: "jobhive-f8260.firebaseapp.com",
+    projectId: "jobhive-f8260",
+    storageBucket: "jobhive-f8260.firebasestorage.app",
+    messagingSenderId: "680568830430",
+    appId: "1:680568830430:web:950a39730688ff1ce1454f"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+
+    const tabs = document.querySelectorAll(".tab");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    // Add event listeners to tabs
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.getAttribute("data-content");
+        if (target === "login") {
+          window.location.href = "index.html"; // Redirect to login.html on login tab click
+        } else {
+          tabContents.forEach((tabContent) => {
+            if (tabContent.id === target) {
+              tabContent.classList.add("active");
+            } else {
+              tabContent.classList.remove("active");
+            }
+          });
+          tabs.forEach((t) => {
+            if (t === tab) {
+              t.classList.add("active");
+            } else {
+              t.classList.remove("active");
+            }
+          });
+        }
+      });
+    });
+
+    // Form submission event listener
+    document
+      .getElementById("index")
+      .addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Get form values
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const dob = document.getElementById("dob").value;
+        const phone = document.getElementById("phone").value.trim();
+       
+               const fieldOfInterest =
+          document.getElementById("field-of-interest").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirm-password").value;
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+          alert("Passwords do not match!");
+          return;
+        }
+
+        // Simple field validation
+        if (name === "" || email === "" || dob === "" || phone === "" || branch === "" || passoutYear === "" || fieldOfInterest === "" || password === "") {
+          alert("Please fill out all required fields.");
+          return;
+        }
+
+        // Validate phone number
+        const phonePattern = /^\d{3}-\d{3}-\d{4}$/;
+        if (!phonePattern.test(phone)) {
+          alert("Phone number must be in the format xxx-xxx-xxxx.");
+          return;
+        }
+
+       
+        // Create a new user with Firebase Authentication
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // User signed up successfully
+            const user = userCredential.user;
+            console.log('User signed up:', user.uid);
+
+            // Push user data to Firebase Realtime Database
+            push(ref(database, "users/" + user.uid), {
+              name: name,
+              dob: dob,
+              phone: phone,
+              branch: branch,
+              fieldOfInterest: fieldOfInterest,
+            })
+            .then(() => {
+              // Redirect to home.html
+              window.location.href = "home.html";
+            })
+            .catch((error) => {
+              console.error("Error adding student data: ", error);
+            });
+          })
+          .catch((error) => {
+            console.error("Error creating user: ", error);
+            alert("Error creating account. Please try again.");
+          });
+      });
+  </script>
+</body>
+</html>
+
+</body>
+</html>
+

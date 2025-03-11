@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Profile page</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --error-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        .profile-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .profile-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .profile-picture-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .profile-picture {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .change-picture {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: var(--dark-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-form {
+            padding: 20px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+        
+        .form-group {
+            flex: 1 1 300px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .languages-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .language-tag {
+            background-color: var(--light-color);
+            border-radius: 20px;
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-language {
+            cursor: pointer;
+            color: var(--error-color);
+            font-weight: bold;
+        }
+        
+        .add-language {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .add-language input {
+            flex: 1;
+        }
+        
+        .add-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .qualifications-list {
+            margin-top: 10px;
+        }
+        
+        .qualification-item {
+            background-color: var(--light-color);
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .remove-qualification {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--error-color);
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .save-button {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .save-button:hover {
+            background-color: #219653;
+        }
+        
+        .cancel-button {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .cancel-button:hover {
+            background-color: #bdc3c7;
+        }
+        
+        .profile-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .status-complete {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-incomplete {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .progress-container {
+            margin-top: 15px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--success-color);
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-group {
+                flex: 1 1 100%;
+            }
+            
+            .profile-picture-container {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">JobHive</div>
+        <nav>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                
+                
+               
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="profile-container">
+            
+            
+            <div class="profile-form">
+               
+                
+                <form id="profile-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name*</label>
+                            <input type="text" id="first-name" name="first-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="last-name">Last Name*</label>
+                            <input type="text" id="last-name" name="last-name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth*</label>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address*</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number*</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="area-of-interest">Areas of Interest*</label>
+                        <select id="area-of-interest" name="area-of-interest" multiple>
+                            <option value="customer-service">Customer Service</option>
+                            <option value="retail">Retail</option>
+                            <option value="hospitality">Hospitality</option>
+                            <option value="administration">Administration</option>
+                            <option value="education">Education</option>
+                            <option value="technology">Technology</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="delivery">Delivery</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="finance">Finance</option>
+                        </select>
+                        <small>Hold Ctrl (or Cmd on Mac) to select multiple options</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Qualifications</label>
+                        <div class="qualifications-list" id="qualifications-list">
+                            <!-- Qualifications will be added here -->
+                        </div>
+                        
+                        <div class="add-qualification" style="margin-top: 10px;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="qualification-title">Degree/Certificate</label>
+                                    <input type="text" id="qualification-title">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="qualification-institution">Institution</label>
+                                    <input type="text" id="qualification-institution">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="qualification-year">Year</label>
+                                    <input type="number" id="qualification-year" min="1950" max="2030">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="qualification-grade">Grade/Score</label>
+                                    <input type="text" id="qualification-grade">
+                                </div>
+                            </div>
+                            
+                           
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Languages Known</label>
+                        <div class="languages-container" id="languages-container">
+                            <!-- Language tags will be added here -->
+                        </div>
+                        
+                        <div class="add-language">
+                            <input type="text" id="language-input" placeholder="Add languages known...">
+                           
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bio">About Me</label>
+                        <textarea id="bio" name="bio" placeholder="Tell employers a bit about yourself..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="availability">Availability</label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="weekday-availability">Weekdays</label>
+                                <select id="weekday-availability">
+                                    <option value="Unavailable">Unavailable</option>
+                                    <option value="Morning">Morning</option>
+                                    <option value="Afternoon">Afternoon</option>
+                                    <option value="Evening">Evening</option>
+                                    <option value="All Day">All Day</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="weekend-availability">Weekends</label>
+                                <select id="weekend-availability">
+                                    <option value="Unavailable">Unavailable</option>
+                                    <option value="Morning">Morning</option>
+                                    <option value="Afternoon">Afternoon</option>
+                                    <option value="Evening">Evening</option>
+                                    <option value="All Day">All Day</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hours-per-week">Hours Available per Week</label>
+                        <input type="number" id="hours-per-week" min="1" max="40">
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="submit" class="save-button">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const profileForm = document.getElementById('profile-form');
+            const firstName = document.getElementById('first-name');
+            const lastName = document.getElementById('last-name');
+            const displayName = document.getElementById('display-name');
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercentage = document.getElementById('progress-percentage');
+            const qualificationsList = document.getElementById('qualifications-list');
+            const addQualificationBtn = document.getElementById('add-qualification-btn');
+            const languagesContainer = document.getElementById('languages-container');
+            const languageInput = document.getElementById('language-input');
+            const languageProficiency = document.getElementById('language-proficiency');
+            const addLanguageBtn = document.getElementById('add-language-btn');
+            const changePictureBtn = document.getElementById('change-picture');
+            const profilePicInput = document.getElementById('profile-pic-input');
+            const previewImage = document.getElementById('preview-image');
+            
+            // Check if user is logged in (in a real application)
+            const isLoggedIn = checkUserLogin();
+            if (!isLoggedIn) {
+                window.location.href = 'login.html'; // Redirect to login page
+            }
+            
+            // Load profile data if it exists
+            loadProfileData();
+            
+            // Update name display when first or last name changes
+            firstName.addEventListener('input', updateDisplayName);
+            lastName.addEventListener('input', updateDisplayName);
+            
+            // Add qualification functionality
+            addQualificationBtn.addEventListener('click', addQualification);
+            
+            // Add language functionality
+            addLanguageBtn.addEventListener('click', addLanguage);
+            
+            // Change profile picture
+            changePictureBtn.addEventListener('click', function() {
+                profilePicInput.click();
+            });
+            
+            profilePicInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewImage.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Form submission
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate form
+                if (!validateForm()) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+                
+                // Save profile data
+                saveProfileData();
+                
+                // Show success message
+                alert('Profile saved successfully!');
+                
+                // Update progress
+                updateProgress();
+            });
+            
+            // Function to check if user is logged in
+            function checkUserLogin() {
+                // In a real application, you would check the session or token
+                // For this example, we'll just return true
+                return true;
+            }
+            
+            // Function to update display name
+            function updateDisplayName() {
+                const first = firstName.value || '';
+                const last = lastName.value || '';
+                
+                if (first || last) {
+                    displayName.textContent = `${first} ${last}`.trim();
+                } else {
+                    displayName.textContent = 'Your Profile';
+                }
+            }
+            
+            // Function to add qualification
+            function addQualification() {
+                const title = document.getElementById('qualification-title').value;
+                const institution = document.getElementById('qualification-institution').value;
+                const year = document.getElementById('qualification-year').value;
+                const grade = document.getElementById('qualification-grade').value;
+                
+                if (!title || !institution) {
+                    alert('Please enter both degree/certificate and institution.');
+                    return;
+                }
+                
+                const qualificationItem = document.createElement('div');
+                qualificationItem.className = 'qualification-item';
+                qualificationItem.innerHTML = `
+                    <span class="remove-qualification">&times;</span>
+                    <p><strong>${title}</strong> - ${institution}</p>
+                    <p>${year ? 'Year: ' + year : ''} ${grade ? 'Grade: ' + grade : ''}</p>
+                `;
+                
+                qualificationsList.appendChild(qualificationItem);
+                
+                // Clear inputs
+                document.getElementById('qualification-title').value = '';
+                document.getElementById('qualification-institution').value = '';
+                document.getElementById('qualification-year').value = '';
+                document.getElementById('qualification-grade').value = '';
+                
+                // Add remove functionality
+                const removeBtn = qualificationItem.querySelector('.remove-qualification');
+                removeBtn.addEventListener('click', function() {
+                    qualificationsList.removeChild(qualificationItem);
+                    updateProgress();
+                });
+                
+                updateProgress();
+            }
+            
+            // Function to add language
+            function addLanguage() {
+                const language = languageInput.value.trim();
+                const proficiency = languageProficiency.value;
+                
+                if (!language) {
+                    alert('Please enter a language.');
+                    return;
+                }
+                
+                // Check if language already exists
+                const existingLanguages = languagesContainer.querySelectorAll('.language-tag');
+                for (let i = 0; i < existingLanguages.length; i++) {
+                    const existingLanguage = existingLanguages[i].textContent.split('(')[0].trim();
+                    if (existingLanguage.toLowerCase() === language.toLowerCase()) {
+                        alert('This language is already added.');
+                        return;
+                    }
+                }
+                
+                const languageTag = document.createElement('div');
+                languageTag.className = 'language-tag';
+                languageTag.innerHTML = `
+                    ${language} (${proficiency}) <span class="remove-language">&times;</span>
+                `;
+                
+                languagesContainer.appendChild(languageTag);
+                
+                // Clear input
+                languageInput.value = '';
+                
+                // Add remove functionality
+                const removeBtn = languageTag.querySelector('.remove-language');
+                removeBtn.addEventListener('click', function() {
+                    languagesContainer.removeChild(languageTag);
+                    updateProgress();
+                });
+                
+                updateProgress();
+            }
+            
+            // Function to validate form
+            function validateForm() {
+                const requiredFields = [
+                    document.getElementById('first-name'),
+                    document.getElementById('last-name'),
+                    document.getElementById('dob'),
+                    document.getElementById('email'),
+                    document.getElementById('phone')
+                ];
+                
+                for (let field of requiredFields) {
+                    if (!field.value.trim()) {
+                        field.focus();
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+            
+            // Function to save profile data
+            function saveProfileData() {
+                // Gather all profile data
+                const profileData = {
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                    dob: document.getElementById('dob').value,
+                    gender: document.getElementById('gender').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    areasOfInterest: getSelectedOptions(document.getElementById('area-of-interest')),
+                    qualifications: getQualifications(),
+                    languages: getLanguages(),
+                    bio: document.getElementById('bio').value,
+                    weekdayAvailability: document.getElementById('weekday-availability').value,
+                    weekendAvailability: document.getElementById('weekend-availability').value,
+                    hoursPerWeek: document.getElementById('hours-per-week').value,
+                    profilePicture: previewImage.src
+                };
+                
+                // In a real application, you would send this data to a server
+                // For this example, we'll store it in localStorage
+                localStorage.setItem('profileData', JSON.stringify(profileData));
+            }
+            
+            // Function to load profile data
+            function loadProfileData() {
+                // In a real application, you would fetch this data from a server
+                // For this example, we'll retrieve it from localStorage
+                const profileData = JSON.parse(localStorage.getItem('profileData'));
+                
+                if (profileData) {
+                    firstName.value = profileData.firstName || '';
+                    lastName.value = profileData.lastName || '';
+                    document.getElementById('dob').value = profileData.dob || '';
+                    document.getElementById('gender').value = profileData.gender || '';
+                    document.getElementById('email').value = profileData.email || '';
+                    document.getElementById('phone').value = profileData.phone || '';
+                    document.getElementById('address').value = profileData.address || '';
+                    
+                    // Set selected areas of interest
+                    if (profileData.areasOfInterest && profileData.areasOfInterest.length) {
+                        setSelectedOptions(document.getElementById('area-of-interest'), profileData.areasOfInterest);
+                    }
+                    
+                    // Add qualifications
+                    if (profileData.qualifications && profileData.qualifications.length) {
+                        profileData.qualifications.forEach(qualification => {
+                            const qualificationItem = document.createElement('div');
+                            qualificationItem.className = 'qualification-item';
+                            qualificationItem.innerHTML = `
+                                <span class="remove-qualification">&times;</span>
+                                <p><strong>${qualification.title}</strong> - ${qualification.institution}</p>
+                                <p>${qualification.year ? 'Year: ' + qualification.year : ''} ${qualification.grade ? 'Grade: ' + qualification.grade : ''}</p>
+                            `;
+                            
+                            qualificationsList.appendChild(qualificationItem);
+                            
+                            // Add remove functionality
+                            const removeBtn = qualificationItem.querySelector('.remove-qualification');
+                            removeBtn.addEventListener('click', function() {
+                                qualificationsList.removeChild(qualificationItem);
+                                updateProgress();
+                            });
+                        });
+                    }
+                    
+                    // Add languages
+                    if (profileData.languages && profileData.languages.length) {
+                        profileData.languages.forEach(lang => {
+                            const languageTag = document.createElement('div');
+                            languageTag.className = 'language-tag';
+                            languageTag.innerHTML = `
+                                ${lang.language} (${lang.proficiency}) <span class="remove-language">&times;</span>
+                            `;
+                            
+                            languagesContainer.appendChild(languageTag);
+                            
+                            // Add remove functionality
+                            const removeBtn = languageTag.querySelector('.remove-language');
+                            removeBtn.addEventListener('click', function() {
+                                languagesContainer.removeChild(languageTag);
+                                updateProgress();
+                            });
+                        });
+                    }
+                    
+                    document.getElementById('bio').value = profileData.bio || '';
+                    document.getElementById('weekday-availability').value = profileData.weekdayAvailability || '';
+                    document.getElementById('weekend-availability').value = profileData.weekendAvailability || '';
+                    document.getElementById('hours-per-week').value = profileData.hoursPerWeek || '';
+                    
+                    if (profileData.profilePicture) {
+                        previewImage.src = profileData.profilePicture;
+                    }
+                    
+                    updateDisplayName();
+                    updateProgress();
+                }
+            }
+            
+            // Helper function to get selected options from a multi-select
+            function getSelectedOptions(selectElement) {
+                const result = [];
+                const options = selectElement && selectElement.options;
+                
+                if (!options) return result;
+                
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].selected) {
+                        result.push(options[i].value);
+                    }
+                }
+                
+                return result;
+            }
+            
+            // Helper function to set selected options in a multi-select
+            function setSelectedOptions(selectElement, values) {
+                const options = selectElement && selectElement.options;
+                
+                if (!options) return;
+                
+                for (let i = 0; i < options.length; i++) {
+                    options[i].selected = values.includes(options[i].value);
+                }
+            }
+            
+            // Helper function to get qualifications
+            function getQualifications() {
+                const result = [];
+                const qualificationItems = qualificationsList.querySelectorAll('.qualification-item');
+                
+                qualificationItems.forEach(item => {
+                    const title = item.querySelector('strong').textContent;
+                    const institution = item.querySelector('p').textContent.split('-')[1].trim();
+                    const yearMatch = item.querySelector('p:nth-child(2)').textContent.match(/Year: (\d+)/);
+                    const gradeMatch = item.querySelector('p:nth-child(2)').textContent.match(/Grade: ([^$]+)/);
+                    
+                    result.push({
+                        title,
+                        institution,
+                        year: yearMatch ? yearMatch[1] : '',
+                        grade: gradeMatch ? gradeMatch[1] : ''
+                    });
+                });
+                
+                return result;
+            }
+            
+            // Helper function to get languages
+            function getLanguages() {
+                const result = [];
+                const languageTags = languagesContainer.querySelectorAll('.language-tag');
+                
+                languageTags.forEach(tag => {
+                    const text = tag.textContent.trim();
+                    const language = text.split('(')[0].trim();
+                    const proficiency = text.match(/\(([^)]+)\)/)[1].trim();
+                    
+                    result.push({
+                        language,
+                        proficiency
+                    });
+                });
+                
+                return result;
+            }
+            
+            // Function to update profile completion progress
+            function updateProgress() {
+                // Calculate progress
+                let filledFields = 0;
+                let totalFields = 0;
+                
+                // Required fields
+                const requiredFields = [
+                    document.getElementById('first-name'),
+                    document.getElementById('last-name'),
+                    document.getElementById('dob'),
+                    document.getElementById('email'),
+                    document.getElementById('phone')
+                ];
+                
+                requiredFields.forEach(field =>
